@@ -9,8 +9,20 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
+  find() {
+    return this.usersRepository.find();
+  }
+
   create(name: string, email: string, password: string) {
-    const user = this.usersRepository.create({ name, email, password });
+    const user = this.usersRepository.create({ name, email });
     return this.usersRepository.save(user);
   }
+
+  findOneBy(id: number) {
+    return this.usersRepository.findOneBy({ id });
+  }
+
+  update() {}
+
+  remove() {}
 }
