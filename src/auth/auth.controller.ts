@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, Session } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Session,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
@@ -6,9 +13,12 @@ import { LoginUserDto } from './dtos/login-user.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from 'src/users/dtos/user.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { User } from 'src/users/user.entity';
 
 @Controller('auth')
 @Serialize(UserDto)
+@UseInterceptors(CurrentUserInterceptor)
 export class AuthController {
   constructor(
     private usersService: UsersService,
@@ -39,7 +49,7 @@ export class AuthController {
   }
 
   @Get('/whoami')
-  async whoAmI(@CurrentUser() user: string) {
+  async whoAmI(@CurrentUser() user: User) {
     return user;
   }
 }
