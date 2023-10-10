@@ -81,4 +81,21 @@ describe('AuthService', () => {
       'Password tidak sesuai',
     );
   });
+
+  it('should return the user if login is successful', async () => {
+    fakeUsersService.find = () => {
+      return Promise.resolve([
+        {
+          id: 1,
+          name: 'John Doe',
+          email: 'john@example.com',
+          password:
+            '641e1ff187354521.a6fee14302692611501f0a726d4546bc8dddcff7516c3413f3ccd2151bba551186414fda276a840632b141de2cd72ccc4a95d7cbbc9415af36c8150f8962de0c',
+        } as User,
+      ]);
+    };
+
+    const user = await service.login('john@example.com', 'password');
+    expect(user).toBeDefined();
+  });
 });
