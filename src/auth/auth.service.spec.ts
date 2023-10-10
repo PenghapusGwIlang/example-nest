@@ -5,9 +5,10 @@ import { User } from '../users/user.entity';
 
 describe('AuthService', () => {
   let service: AuthService;
+  let fakeUsersService: Partial<UsersService>;
 
   beforeEach(async () => {
-    const fakeUsersService: Partial<UsersService> = {
+    fakeUsersService = {
       find: () => Promise.resolve([]),
       create: (name: string, email: string, password: string) => {
         return Promise.resolve({ id: 1, name, email, password } as User);
@@ -40,5 +41,21 @@ describe('AuthService', () => {
     const [salt, hash] = user.password.split('.');
     expect(salt).toBeDefined();
     expect(hash).toBeDefined();
+  });
+
+  it('should fail to create a user with an existing email', async () => {
+    fakeUsersService.find = () => {
+      return Promise.resolve([
+        {
+          id: 1,
+          name: 'John Doe',
+          email: 'john@example.com',
+          password: 'password',
+        } as User,
+      ]);
+    };
+    await expect(
+      service.register('John Doe', 'john@example.com', 'password'),
+    ).rejects.toThrow('Email sudah terdaftar');
   });
 });
