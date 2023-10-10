@@ -57,16 +57,7 @@ describe('AuthService', () => {
   });
 
   it('should fail to create a user with an existing email', async () => {
-    fakeUsersService.find = () => {
-      return Promise.resolve([
-        {
-          id: 1,
-          name: 'John Doe',
-          email: 'john@example.com',
-          password: 'password',
-        } as User,
-      ]);
-    };
+    await service.register('John Doe', 'john@example.com', 'password');
     await expect(
       service.register('John Doe', 'john@example.com', 'password'),
     ).rejects.toThrow('Email sudah terdaftar');
@@ -79,17 +70,7 @@ describe('AuthService', () => {
   });
 
   it('should throw BadRequestException if password is incorrect', async () => {
-    fakeUsersService.find = () => {
-      return Promise.resolve([
-        {
-          id: 1,
-          name: 'John Doe',
-          email: 'john@example.com',
-          password: 'password',
-        } as User,
-      ]);
-    };
-
+    await service.register('John Doe', 'john@example.com', 'test123');
     await expect(service.login('john@example.com', 'admin')).rejects.toThrow(
       'Password tidak sesuai',
     );
