@@ -64,4 +64,21 @@ describe('AuthService', () => {
       'Email tidak ditemukan',
     );
   });
+
+  it('should throw BadRequestException if password is incorrect', async () => {
+    fakeUsersService.find = () => {
+      return Promise.resolve([
+        {
+          id: 1,
+          name: 'John Doe',
+          email: 'john@example.com',
+          password: 'password',
+        } as User,
+      ]);
+    };
+
+    await expect(service.login('john@example.com', 'admin')).rejects.toThrow(
+      'Password tidak sesuai',
+    );
+  });
 });
