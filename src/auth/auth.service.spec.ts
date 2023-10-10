@@ -58,4 +58,10 @@ describe('AuthService', () => {
       service.register('John Doe', 'john@example.com', 'password'),
     ).rejects.toThrow('Email sudah terdaftar');
   });
+
+  it('should fail if user login with an invalid email', async () => {
+    await expect(service.login('admin@mail.com', 'password')).rejects.toThrow(
+      'Email tidak ditemukan',
+    );
+  });
 });
