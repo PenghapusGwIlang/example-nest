@@ -1,5 +1,4 @@
-import { Transform } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class QueryItemDto {
   @IsString()
@@ -10,8 +9,4 @@ export class QueryItemDto {
 
   @IsString()
   category: string;
-
-  @Transform(({ value }) => parseInt(value))
-  @IsNumber()
-  year: number;
 }
